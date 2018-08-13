@@ -1,5 +1,5 @@
 import { oneDigit, twoDigits, miscNumbers } from './data-suite-registry';
-import { AbstractTestObject } from '../../../src/base/abstract-test-object';
+import { AbstractTestObject } from '../../../src';
 import { Arithmetic1 } from '../test-objects/arithmetic1';
 import { Arithmetic2 } from '../test-objects/arithmetic2';
 
