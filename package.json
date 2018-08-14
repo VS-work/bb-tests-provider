@@ -1,8 +1,8 @@
 {
   "name": "bb-tests-provider",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Back-to-back tests provider",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "mocha --require ts-node/register test/**/*.spec.ts",
     "build": "tsc",
