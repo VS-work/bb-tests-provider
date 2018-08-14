@@ -36,6 +36,10 @@ export abstract class AbstractTestObject {
   run(request, onRead) {
     const result = this.object[this.getRootMethod()](request);
 
-    onRead(null, result);
+    if (!result.then) {
+      onRead(null, result);
+    } else {
+      result.then(data => onRead(null, data)).catch(onRead);
+    }
   }
 }
