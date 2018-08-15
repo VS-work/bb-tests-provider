@@ -45,6 +45,8 @@ export class TestSuite {
 
   withRecordsCount(recordsCount: number) {
     this.recordsCount = recordsCount;
+
+    return this;
   }
 
   forDataSuite(dataSuite: DataSuite) {

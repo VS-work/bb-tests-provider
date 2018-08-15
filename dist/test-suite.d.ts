@@ -10,11 +10,13 @@ export declare class TestSuite {
     dataSources: DataSuite[];
     postponed: (typeof AbstractTestObject)[];
     postponeReason: string;
+    recordsCount: number;
     withTitle(title: string): this;
     withFixture(fixture: string): this;
     withFixturePath(fixturePath: string): this;
     withInputData(inputData: any): this;
     withAssertPattern(assertPattern: typeof AbstractAssertPattern): this;
+    withRecordsCount(recordsCount: number): void;
     forDataSuite(dataSuite: DataSuite): this;
     postponeFor(postponeReason: string, ...testObject: (typeof AbstractTestObject)[]): this;
 }
