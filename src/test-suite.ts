@@ -11,6 +11,7 @@ export class TestSuite {
   dataSources: DataSuite[] = [];
   postponed: (typeof AbstractTestObject)[] = [];
   postponeReason: string;
+  recordsCount: number;
 
   withTitle(title: string) {
     this.title = title;
@@ -40,6 +41,10 @@ export class TestSuite {
     this.assertPattern = assertPattern;
 
     return this;
+  }
+
+  withRecordsCount(recordsCount: number) {
+    this.recordsCount = recordsCount;
   }
 
   forDataSuite(dataSuite: DataSuite) {
