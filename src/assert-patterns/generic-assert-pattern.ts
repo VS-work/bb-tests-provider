@@ -5,11 +5,12 @@ import * as base64 from 'base-64';
 import * as reduce from 'object.reduce';
 import { AbstractAssertPattern } from '../base/abstract-assert-pattern';
 import { writeUsefultTestInformation } from './utils';
+import { TestSuite } from "../test-suite";
 
 const expect = chai.expect;
 
 export class GenericAssertPattern extends AbstractAssertPattern {
-  processAssert(err, data, dataSuiteSuffix: string, testIndex: number) {
+  processAssert(err, data, dataSuiteSuffix: string, testSuite: TestSuite, testIndex: number) {
     const fixturePath = path.resolve(this.fixturePath, this.fixture.replace(/#datasource#/, dataSuiteSuffix));
     const fixtureData = require(fixturePath);
     const areEqual = this.equals(data, fixtureData);

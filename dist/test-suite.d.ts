@@ -16,7 +16,7 @@ export declare class TestSuite {
     withFixturePath(fixturePath: string): this;
     withInputData(inputData: any): this;
     withAssertPattern(assertPattern: typeof AbstractAssertPattern): this;
-    withRecordsCount(recordsCount: number): void;
+    withRecordsCount(recordsCount: number): this;
     forDataSuite(dataSuite: DataSuite): this;
     postponeFor(postponeReason: string, ...testObject: (typeof AbstractTestObject)[]): this;
 }

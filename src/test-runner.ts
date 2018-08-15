@@ -113,7 +113,7 @@ export function runTests(getTestObjectsGroups: Function, testSuites: TestSuite[]
                 }
 
                 try {
-                  flow.processAssert(err, data, testObject.dataSuite.name, currentTestIndex);
+                  flow.processAssert(err, data, testObject.dataSuite.name, testSuite, currentTestIndex);
 
                   done();
                 } catch (err) {
