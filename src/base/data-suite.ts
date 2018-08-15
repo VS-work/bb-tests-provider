@@ -1,4 +1,4 @@
 export class DataSuite {
-  constructor(public name, public title) {
+  constructor(public name, public title, public nick?: string) {
   }
 }
