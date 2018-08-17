@@ -7,6 +7,8 @@ import { TestSuite } from './test-suite';
 import { AbstractTestObject } from './base/abstract-test-object';
 import { performance } from 'perf_hooks';
 
+const POSTPONE_LABEL = '***';
+
 function* indexMaker() {
   let index = 1;
 
@@ -46,11 +48,21 @@ export function printSummaryTable(testCases: TestSuite[], aggregatedData) {
     const rowData = [testTitle];
 
     for (const testObjectTitle of testObjectTitles) {
+      let cellData = '';
+
       if (aggregatedData[testTitle][testObjectTitle]) {
-        rowData.push(aggregatedData[testTitle][testObjectTitle].executionTime);
-      } else {
-        rowData.push('');
+        cellData = aggregatedData[testTitle][testObjectTitle].executionTime;
       }
+
+      if (aggregatedData[testTitle][testObjectTitle].hasError) {
+        cellData = colors.red(cellData)
+      }
+
+      if (cellData === POSTPONE_LABEL) {
+        cellData = colors.blue(cellData)
+      }
+
+      rowData.push(cellData);
     }
 
     tableData.push(rowData);
@@ -95,7 +107,7 @@ export function runTests(getTestObjectsGroups: Function, testSuites: TestSuite[]
 
           if (isTestCaseShouldBeOmitted(testSuite, testObject)) {
             if (aggregatedData[testSuiteTitleWithDataset][testObject.getTitle()]) {
-              aggregatedData[testSuiteTitleWithDataset][testObject.getTitle()].executionTime = '***';
+              aggregatedData[testSuiteTitleWithDataset][testObject.getTitle()].executionTime = POSTPONE_LABEL;
             }
 
             xit(`${title}`, noop);
@@ -117,6 +129,7 @@ export function runTests(getTestObjectsGroups: Function, testSuites: TestSuite[]
 
                   done();
                 } catch (err) {
+                  aggregatedData[testSuiteTitleWithDataset][testObject.getTitle()].hasError = true;
                   done(err);
                 }
               });

@@ -1,6 +1,6 @@
 {
   "name": "bb-tests-provider",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "Back-to-back tests provider",
   "main": "dist/index.js",
   "scripts": {
