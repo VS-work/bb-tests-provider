@@ -91,7 +91,7 @@ export function runTests(getTestObjectsGroups: Function, testSuites: TestSuite[]
   const testObjects = getTestObjectsGroups();
 
   do {
-    let testObject = testObjects.shift();
+    const testObject = testObjects.shift();
 
     for (const testSuite of testSuites) {
       for (const dataset of testSuite.dataSources) {
@@ -133,7 +133,7 @@ export function runTests(getTestObjectsGroups: Function, testSuites: TestSuite[]
                   aggregatedRecord.hasError = true;
                   done(err);
                 } finally {
-                  testObject = null;
+                  data = null;
                 }
               });
             });
