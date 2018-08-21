@@ -97,20 +97,21 @@ export function runTests(getTestObjectsGroups: Function, testSuites: TestSuite[]
       for (const dataset of testSuite.dataSources) {
         const testSuiteTitleWithDataset = `${testSuite.title} on "${dataset.name}"`;
 
-        aggregatedData[testSuiteTitleWithDataset] = {};
+        if (!aggregatedData[testSuiteTitleWithDataset]) {
+          aggregatedData[testSuiteTitleWithDataset] = {};
+        }
 
         if (dataset === testObject.dataSuite) {
           aggregatedData[testSuiteTitleWithDataset][testObject.getTitle()] = {
             executionTime: null
           };
 
+          const aggregatedRecord = aggregatedData[testSuiteTitleWithDataset][testObject.getTitle()];
           const title = `"${testObject.getTitle()}" on "${testObject.dataSuite.title} (${testObject.dataSuite.name})": ${testSuite.title}`;
           const flow = new testSuite.assertPattern(testSuite.fixture, testSuite.fixturePath);
 
           if (isTestCaseShouldBeOmitted(testSuite, testObject)) {
-            if (aggregatedData[testSuiteTitleWithDataset][testObject.getTitle()]) {
-              aggregatedData[testSuiteTitleWithDataset][testObject.getTitle()].executionTime = POSTPONE_LABEL;
-            }
+            aggregatedRecord.executionTime = POSTPONE_LABEL;
 
             xit(`${title}`, noop);
           } else {
@@ -122,16 +123,14 @@ export function runTests(getTestObjectsGroups: Function, testSuites: TestSuite[]
               testObject.run(testSuite.inputData, (err, data) => {
                 const timeFinish = performance.now();
 
-                if (aggregatedData[testSuiteTitleWithDataset][testObject.getTitle()]) {
-                  aggregatedData[testSuiteTitleWithDataset][testObject.getTitle()].executionTime = Number((timeFinish - timeStart).toFixed(3));
-                }
+                aggregatedRecord.executionTime = Number((timeFinish - timeStart).toFixed(3));
 
                 try {
                   flow.processAssert(err, data, testObject.dataSuite.name, testSuite, currentTestIndex);
 
                   done();
                 } catch (err) {
-                  aggregatedData[testSuiteTitleWithDataset][testObject.getTitle()].hasError = true;
+                  aggregatedRecord.hasError = true;
                   done(err);
                 }
               });
