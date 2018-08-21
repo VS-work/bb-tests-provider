@@ -132,8 +132,6 @@ export function runTests(getTestObjectsGroups: Function, testSuites: TestSuite[]
                 } catch (err) {
                   aggregatedRecord.hasError = true;
                   done(err);
-                } finally {
-                  data = null;
                 }
               });
             });
