@@ -88,15 +88,17 @@ function isTestCaseShouldBeOmitted(testSuite: TestSuite, testObject: AbstractTes
 }
 
 export function runTests(getTestObjectsGroups: Function, testSuites: TestSuite[], aggregatedData = {}) {
-  for (const testSuite of testSuites) {
-    for (const dataset of testSuite.dataSources) {
-      const testSuiteTitleWithDataset = `${testSuite.title} on "${dataset.name}"`;
+  const testObjects = getTestObjectsGroups();
 
-      aggregatedData[testSuiteTitleWithDataset] = {};
+  do {
+    const testObject = testObjects.shift();
 
-      const testObjects = getTestObjectsGroups();
+    for (const testSuite of testSuites) {
+      for (const dataset of testSuite.dataSources) {
+        const testSuiteTitleWithDataset = `${testSuite.title} on "${dataset.name}"`;
 
-      for (const testObject of testObjects) {
+        aggregatedData[testSuiteTitleWithDataset] = {};
+
         if (dataset === testObject.dataSuite) {
           aggregatedData[testSuiteTitleWithDataset][testObject.getTitle()] = {
             executionTime: null
@@ -138,5 +140,5 @@ export function runTests(getTestObjectsGroups: Function, testSuites: TestSuite[]
         }
       }
     }
-  }
+  } while (!isEmpty(testObjects));
 }
