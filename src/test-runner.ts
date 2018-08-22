@@ -2,7 +2,7 @@ import * as path from 'path';
 import * as rimraf from 'rimraf';
 import * as colors from 'colors';
 import { table } from 'table';
-import { head, keys, isEmpty, split, nth, noop, isEqual } from 'lodash';
+import { head, keys, isEmpty, split, nth, noop, isEqual, isArray } from 'lodash';
 import { TestSuite } from './test-suite';
 import { AbstractTestObject } from './base/abstract-test-object';
 import { RunnerOption } from './base/runner-option';
@@ -93,7 +93,7 @@ function isTestCaseShouldBeOmitted(testSuite: TestSuite, testObject: AbstractTes
 }
 
 function isTestCaseShouldBeDiscarded(testObject: AbstractTestObject, options: RunnerOption[] = []): boolean {
-  if (!options || !options.filter || isEmpty(options)) {
+  if (!isArray(options) || isEmpty(options)) {
     return false;
   }
 
