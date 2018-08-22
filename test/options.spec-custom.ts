@@ -29,7 +29,7 @@ describe('Multiplication supporting with options', () => {
   });
 
   runTests(getTestObjectGroups, testSuites, aggregatedData, [{
-    testObjectTitle: 'Arithmetic 1',
-    dataSuiteTitle: 'One digit'
+    testObjectTitle: 'Arithmetic 2',
+    dataSuiteTitle: 'Two digits'
   }]);
 });
