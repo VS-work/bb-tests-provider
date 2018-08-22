@@ -93,6 +93,10 @@ function isTestCaseShouldBeOmitted(testSuite: TestSuite, testObject: AbstractTes
 }
 
 function isTestCaseShouldBeDiscarded(testObject: AbstractTestObject, options: RunnerOption[] = []): boolean {
+  if (!options || !options.filter || isEmpty(options)) {
+    return false;
+  }
+
   const currentOption: RunnerOption = {
     testObjectTitle: testObject.getTitle(),
     dataSuiteTitle: testObject.dataSuite.title
