@@ -2,9 +2,10 @@ import * as path from 'path';
 import * as rimraf from 'rimraf';
 import * as colors from 'colors';
 import { table } from 'table';
-import { head, keys, isEmpty, split, nth, noop } from 'lodash';
+import { head, keys, isEmpty, split, nth, noop, isEqual } from 'lodash';
 import { TestSuite } from './test-suite';
 import { AbstractTestObject } from './base/abstract-test-object';
+import { RunnerOption } from './base/runner-option';
 import { performance } from 'perf_hooks';
 
 const POSTPONE_LABEL = '***';
@@ -47,6 +48,10 @@ export function printSummaryTable(testCases: TestSuite[], aggregatedData) {
   for (const testTitle of testTitles) {
     const rowData = [testTitle];
 
+    if (isEmpty(aggregatedData[testTitle])) {
+      continue;
+    }
+
     for (const testObjectTitle of testObjectTitles) {
       let cellData = '';
 
@@ -73,7 +78,7 @@ export function printSummaryTable(testCases: TestSuite[], aggregatedData) {
   console.log(output);
 }
 
-function isTestCaseShouldBeOmitted(testSuite: TestSuite, testObject: AbstractTestObject) {
+function isTestCaseShouldBeOmitted(testSuite: TestSuite, testObject: AbstractTestObject): boolean {
   if (!isEmpty(testSuite.postponed)) {
     for (const postponedTestObject of testSuite.postponed) {
       const getClassName = classDetails => nth(split(classDetails.valueOf(), ' '), 1);
@@ -87,7 +92,17 @@ function isTestCaseShouldBeOmitted(testSuite: TestSuite, testObject: AbstractTes
   return false;
 }
 
-export function runTests(getTestObjectsGroups: Function, testSuites: TestSuite[], aggregatedData = {}) {
+function isTestCaseShouldBeDiscarded(testObject: AbstractTestObject, options: RunnerOption[] = []): boolean {
+  const currentOption: RunnerOption = {
+    testObjectTitle: testObject.getTitle(),
+    dataSuiteTitle: testObject.dataSuite.title
+  };
+  const matches = options.filter(option => isEqual(option, currentOption));
+
+  return !!isEmpty(matches);
+}
+
+export function runTests(getTestObjectsGroups: Function, testSuites: TestSuite[], aggregatedData = {}, options: RunnerOption[] = []) {
   const testObjects = getTestObjectsGroups();
 
   do {
@@ -101,7 +116,7 @@ export function runTests(getTestObjectsGroups: Function, testSuites: TestSuite[]
           aggregatedData[testSuiteTitleWithDataset] = {};
         }
 
-        if (dataset === testObject.dataSuite) {
+        if (dataset === testObject.dataSuite && !isTestCaseShouldBeDiscarded(testObject, options)) {
           aggregatedData[testSuiteTitleWithDataset][testObject.getTitle()] = {
             executionTime: null
           };
