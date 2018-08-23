@@ -2,7 +2,7 @@ import * as path from 'path';
 import * as rimraf from 'rimraf';
 import * as colors from 'colors';
 import { table } from 'table';
-import { head, keys, isEmpty, split, nth, noop, isEqual, isArray } from 'lodash';
+import { head, keys, isEmpty, split, nth, noop, isEqual, isArray, reduce, uniq } from 'lodash';
 import { TestSuite } from './test-suite';
 import { AbstractTestObject } from './base/abstract-test-object';
 import { RunnerOption } from './base/runner-option';
@@ -38,7 +38,13 @@ function postponeReasonExplanation(testSuites: TestSuite[]) {
 }
 
 export function printSummaryTable(testCases: TestSuite[], aggregatedData) {
-  const testTitles = keys(aggregatedData);
+  const testTitles = uniq(reduce(keys(aggregatedData), (res, testTitle) => {
+    if (!isEmpty(aggregatedData[testTitle])) {
+      res.push(testTitle);
+    }
+
+    return res;
+  }, []));
   const testObjectTitles = keys(aggregatedData[head(testTitles)]);
 
   const tableData = [
